@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript" src="http://appro.mit.jyu.fi/tiea2120/vt/vt3/data.js"></script>
+    <script type="text/javascript" src="vt3.js"></script>
+    <link rel="StyleSheet" href="tyylit.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <title>Tulospalvelu</title>
+</head>
+
+<body>
+
+    <!-- Tämän tiedoston sisältöä saa muuttaa vapaasti tästä kommentista eteenpäin ! -->
+    <h1>Lisää joukkue:</h1>
+    <form>
+        <!--Joukkueen tiedoille fieldset-->
+        <fieldset>
+            <!--Otsikko-->
+            <legend>Joukkueen tiedot</legend>
+            <!--Nimelle oma alueensa-->
+            <p>
+                <label>Nimi
+                    <input size="40" id="joukkueenNimi" required="required">
+                </label>
+            </p>
+            <!--Luontiajalle oma tilansa-->
+            <p>
+                <label>Luontiaika
+                    <input id="aika" type="datetime-local" name="aika" value="2014-01-02T11:42:00" required="required" max="2018-01-01T01:00:00">
+                </label>
+            </p>
+            <!--Leimaustavalle oma alueensa-->
+            <div>
+                <label>Leimaustapa</label>
+                <!--checkboxit span sisälle, jotta saadaan ne kerralla kohdilleen-->
+                <span id="leimaus">
+                    <label class="leimaus">GPS</label>
+                    <input id="gps" type="checkbox" name="leimaus" value="gps">
+                    <br>
+                    <label>NFC</label>
+                    <input id="nfc" type="checkbox" name="leimaus" value="nfc">
+                    <br>
+                    <label>QR</label>
+                    <input id="qr" type="checkbox" name="leimaus" value="qr">
+                    <br>
+                    <label>Lomake</label>
+                    <input id="lomake" type="checkbox" name="leimaus" value="lomake">
+                    <br>
+                </span>
+            </div>
+            <!--Sarjoille oma tilansa-->
+            <div>
+                <label>Sarja</label>
+                <!--Alue, johon tulee sarjat-->
+                <span id="sarjat"></span>
+            </div>
+        </fieldset>
+        <!--Fieldset, johon laitetaan jäsenien tiedot-->
+        <fieldset id="fieldset">
+            <legend>Jäsenet</legend>
+            <p>
+                <label>Jäsen 1
+                    <input size="40" id="kentta1">
+                </label>
+            </p>
+            <p>
+                <label>Jäsen 2
+                    <input size="40" id="kentta2">
+                </label>
+            </p>
+            <p>
+                <label>Jäsen 3
+                    <input size="40" id="kentta3">
+                </label>
+            </p>
+            <p>
+                <label>Jäsen 4
+                    <input size="40" id="kentta4">
+                </label>
+            </p>
+            <p>
+                <label>Jäsen 5
+                    <input size="40" id="kentta5">
+                </label>
+            </p>
+            <!--Painike, jolla voidaan lisätä uusi jäsen kenttä-->
+            <button onclick="lisaaJasen(event)" id="buttonJasen">Lisää jäsen</button>
+        </fieldset>
+        <!--Painike, jolla tallennetaan uusi joukkue-->
+        <button onclick="tallenna(event)">Tallenna</button>
+    </form>
+    <h2>Joukkueet: </h2>
+    <!--Joukkuelistaukselle tila-->
+    <ul id="joukkueListaus">
+    </ul>
+</body>
+
+</html>
