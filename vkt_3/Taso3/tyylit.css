@@ -1,0 +1,66 @@
+/*
+* Inputkentät oikealle
+*/
+p label input {
+    float: right;
+}
+
+div {
+    height: 100%;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 2%;
+}
+
+/*
+* Leimaus tiedot oikealle
+*/
+#leimaus {
+    float: right;
+    text-align: right;
+}
+
+/*
+* Sarjojen tiedot oikealle
+*/
+#sarjat {
+    float: right;
+    text-align: right;
+    margin-right: 0.5%;
+}
+
+/*
+* Fielset marginia ja padding
+*/
+fieldset {
+    padding-right: 20%;
+    margin-bottom: 2%;
+}
+
+/*
+* Kentät, jotka vaaditaan rajataan sinisiksi
+*/
+:required {
+    border: 1px solid blue;
+}
+
+/*
+* Jäsen kenttien rajat sinisiksi
+*/
+#kentta1, #kentta2, #kentta3, #kentta4, #kentta5 {
+    border: 1px solid blue;
+}
+
+/*
+* otsikko 2 vähän margin ylös
+*/
+h2 {
+    margin-top: 5%;
+}
+
+/*
+* taulukkoon alas margin
+*/
+ul {
+    margin-bottom: 10%;
+}
