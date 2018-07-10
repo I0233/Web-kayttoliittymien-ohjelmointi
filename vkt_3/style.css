@@ -1,0 +1,51 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: black;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  display: block;
+}
+
+#canvas_container {
+  position: relative;
+  max-width: 100%;
+}
+
+svg {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  z-index: -1;
+  height: 100%;
+  animation-duration: 5s;
+  animation-name: slide;
+  transition: 0.15s all ease;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  padding-right: 20px;
+}
+
+.blue-bar {
+  fill: #00FFFF;
+  height: 100%;
+}
+
+@keyframes slide {
+  0% {
+    margin-left: 110%;
+  }
+  100% {
+    margin-left: -40%;
+  }
+}
