@@ -14,7 +14,6 @@ html, body {
 #childCanv1 {
   z-index: -2;
   position: absolute;
-  width: 50% !important;
   animation-duration: 5s;
   animation-name: slide-left;
   transition: 0.15s all ease;
@@ -25,7 +24,6 @@ html, body {
 #childCanv2 {
   z-index: -2;
   position: absolute;
-  width: 50% !important;
   animation-duration: 5s;
   animation-name: slide-right;
   transition: 0.15s all ease;
@@ -81,15 +79,15 @@ svg {
 @keyframes slide-owl {
   0% {}
   25% {
-    left: 95%;
-    top: 90%;
+    left: calc(100% - 94.5px);
+    top: calc(100% - 92.5px);
   }
   50% {
     left: 0%;
-    top: 90%;
+    top: calc(100% - 92.5px);
   }
   75% {
-    left: 95%;
+    left: calc(100% - 94.5px);
     top: 0%;
   }
   100% {
@@ -100,18 +98,18 @@ svg {
 
 @keyframes slide-left {
   from {
-    left: 0;
+    right: calc(100%/2);
   }
   to {
-    left: -40%;
+    right: calc(100% - 191.5px);
   }
 }
 
 @keyframes slide-right {
   from {
-    right: 0;
+    left: calc(100%/2);
   }
   to {
-    right: -40%;
+    left: calc(100% - 191.5px);
   }
 }
