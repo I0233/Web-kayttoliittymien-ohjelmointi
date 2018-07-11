@@ -1,14 +1,28 @@
 /*
 * Inputkentät oikealle
 */
-p label input {
+#joukkueenNimi,
+#aika,
+#fieldset div input,
+#fieldsetKisat div input {
     float: right;
 }
 
+/*
+* Kaikille diveille tyyli
+*/
 div {
     height: 100%;
     display: inline-block;
     width: 100%;
+    margin-bottom: 2%;
+}
+
+/*
+* Alasveto valikon tyyli
+*/
+select {
+    float: right;
     margin-bottom: 2%;
 }
 
@@ -33,7 +47,6 @@ div {
 * Fielset marginia ja padding
 */
 fieldset {
-    padding-right: 20%;
     margin-bottom: 2%;
 }
 
@@ -47,7 +60,11 @@ fieldset {
 /*
 * Jäsen kenttien rajat sinisiksi
 */
-#kentta1, #kentta2, #kentta3, #kentta4, #kentta5 {
+#kentta1,
+#kentta2,
+#kentta3,
+#kentta4,
+#kentta5 {
     border: 1px solid blue;
 }
 
@@ -63,4 +80,42 @@ h2 {
 */
 ul {
     margin-bottom: 10%;
+}
+
+/*
+* Tallenna napeille margin
+*/
+#tallennaJ,
+#tallennaK {
+    margin-bottom: 10%;
+}
+
+/*
+* Koko sisällön div
+*/
+#row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/*
+* Vasemmalle kuuluva div
+*/
+#vasen {
+    flex: 1 70%;
+}
+
+/*
+* Oikealle kuuluva div
+*/
+#oikea {
+    flex: 1 30%;
+    min-width: 170px;
+}
+
+/*
+* Peruuta painike
+*/
+#peruuta {
+    margin-left: 5%;
 }

@@ -11,90 +11,122 @@
 </head>
 
 <body>
-
-    <!-- Tämän tiedoston sisältöä saa muuttaa vapaasti tästä kommentista eteenpäin ! -->
-    <h1>Lisää joukkue:</h1>
-    <form>
-        <!--Joukkueen tiedoille fieldset-->
-        <fieldset>
-            <!--Otsikko-->
-            <legend>Joukkueen tiedot</legend>
-            <!--Nimelle oma alueensa-->
-            <p>
-                <label>Nimi
-                    <input size="40" id="joukkueenNimi" required="required">
-                </label>
-            </p>
-            <!--Luontiajalle oma tilansa-->
-            <p>
-                <label>Luontiaika
-                    <input id="aika" type="datetime-local" name="aika" value="2014-01-02T11:42:00" required="required" max="2018-01-01T01:00:00">
-                </label>
-            </p>
-            <!--Leimaustavalle oma alueensa-->
-            <div>
-                <label>Leimaustapa</label>
-                <!--checkboxit span sisälle, jotta saadaan ne kerralla kohdilleen-->
-                <span id="leimaus">
-                    <label class="leimaus">GPS</label>
-                    <input id="gps" type="checkbox" name="leimaus" value="gps">
-                    <br>
-                    <label>NFC</label>
-                    <input id="nfc" type="checkbox" name="leimaus" value="nfc">
-                    <br>
-                    <label>QR</label>
-                    <input id="qr" type="checkbox" name="leimaus" value="qr">
-                    <br>
-                    <label>Lomake</label>
-                    <input id="lomake" type="checkbox" name="leimaus" value="lomake">
-                    <br>
-                </span>
-            </div>
-            <!--Sarjoille oma tilansa-->
-            <div>
-                <label>Sarja</label>
-                <!--Alue, johon tulee sarjat-->
-                <span id="sarjat"></span>
-            </div>
-        </fieldset>
-        <!--Fieldset, johon laitetaan jäsenien tiedot-->
-        <fieldset id="fieldset">
-            <legend>Jäsenet</legend>
-            <p>
-                <label>Jäsen 1
-                    <input size="40" id="kentta1">
-                </label>
-            </p>
-            <p>
-                <label>Jäsen 2
-                    <input size="40" id="kentta2">
-                </label>
-            </p>
-            <p>
-                <label>Jäsen 3
-                    <input size="40" id="kentta3">
-                </label>
-            </p>
-            <p>
-                <label>Jäsen 4
-                    <input size="40" id="kentta4">
-                </label>
-            </p>
-            <p>
-                <label>Jäsen 5
-                    <input size="40" id="kentta5">
-                </label>
-            </p>
-            <!--Painike, jolla voidaan lisätä uusi jäsen kenttä-->
-            <button onclick="lisaaJasen(event)" id="buttonJasen">Lisää jäsen</button>
-        </fieldset>
-        <!--Painike, jolla tallennetaan uusi joukkue-->
-        <button onclick="tallenna(event)">Tallenna</button>
-    </form>
-    <h2>Joukkueet: </h2>
-    <!--Joukkuelistaukselle tila-->
-    <ul id="joukkueListaus">
-    </ul>
+    <div id="row">
+        <div id="vasen">
+            <!-- Tämän tiedoston sisältöä saa muuttaa vapaasti tästä kommentista eteenpäin ! -->
+            <h1>Lisää joukkue:</h1>
+            <form id="jasenLisays">
+                <!--Joukkueen tiedoille fieldset-->
+                <fieldset>
+                    <!--Otsikko-->
+                    <legend>Joukkueen tiedot</legend>
+                    <!--Nimelle oma alueensa-->
+                    <div>
+                        <label>Nimi</label>
+                        <input id="joukkueenNimi" required="required">
+                    </div>
+                    <!--Luontiajalle oma tilansa-->
+                    <div>
+                        <label>Luontiaika</label>
+                        <input id="aika" type="datetime-local" name="aika" value="2014-01-02T11:42:00" required="required" max="2018-01-01T01:00:00">
+                    </div>
+                    <!--Leimaustavalle oma alueensa-->
+                    <div>
+                        <label>Leimaustapa</label>
+                        <!--checkboxit span sisälle, jotta saadaan ne kerralla kohdilleen-->
+                        <span id="leimaus">
+                            <label class="leimaus">GPS</label>
+                            <input id="gps" type="checkbox" name="leimaus" value="gps">
+                            <br>
+                            <label>NFC</label>
+                            <input id="nfc" type="checkbox" name="leimaus" value="nfc">
+                            <br>
+                            <label>QR</label>
+                            <input id="qr" type="checkbox" name="leimaus" value="qr">
+                            <br>
+                            <label>Lomake</label>
+                            <input id="lomake" type="checkbox" name="leimaus" value="lomake">
+                            <br>
+                        </span>
+                    </div>
+                    <div>
+                        <label>Kisa</label>
+                        <select id="select"></select>
+                    </div>
+                    <!--Sarjoille oma tilansa-->
+                    <div>
+                        <label>Sarja</label>
+                        <!--Alue, johon tulee sarjat-->
+                        <span id="sarjat"></span>
+                    </div>
+                </fieldset>
+                <!--Fieldset, johon laitetaan jäsenien tiedot-->
+                <fieldset id="fieldset">
+                    <legend>Jäsenet</legend>
+                    <div>
+                        <label>Jäsen 1 </label>
+                        <input id="kentta1" name="jasen">
+                    </div>
+                    <div>
+                        <label>Jäsen 2</label>
+                        <input id="kentta2" name="jasen">
+                    </div>
+                    <div>
+                        <label>Jäsen 3</label>
+                        <input id="kentta3" name="jasen">
+                    </div>
+                    <div>
+                        <label>Jäsen 4</label>
+                        <input id="kentta4" name="jasen">
+                    </div>
+                    <div>
+                        <label>Jäsen 5</label>
+                        <input id="kentta5" name="jasen">
+                    </div>
+                    <!--Painike, jolla voidaan lisätä uusi jäsen kenttä-->
+                    <button onclick="lisaaJasen(event)" id="buttonJasen">Lisää jäsen</button>
+                </fieldset>
+                <!--Painike, jolla tallennetaan uusi joukkue-->
+                <button onclick="validate()" id="tallennaJ">Tallenna</button>
+                <!--Peruutetaan muokkaus tai lisäys-->
+                <button onclick="peruutaLisays(event)" id="peruuta">Peruuta</button>
+            </form>
+            <form id="kisaLisays">
+                <!--Fieldset, jolla luodaan uusi kilpailu-->
+                <fieldset id="fieldsetKisat">
+                    <legend>Lisää kilpailu</legend>
+                    <!--Kilpailun nimen paikka-->
+                    <div>
+                        <label>Nimi</label>
+                        <input id="kisanNimi" required="required">
+                    </div>
+                    <!--Kilpailun keston paikka-->
+                    <div>
+                        <label>Kesto</label>
+                        <input id="kisanKesto" required="required" min=1>
+                    </div>
+                    <!--Kilpailun alkuajalle tila-->
+                    <div>
+                        <label>Alkuaika</label>
+                        <input id="alkuaika" type="datetime-local" name="aika" value="2018-01-02T11:42:00" required="required">
+                    </div>
+                    <!--Kilpailun loppuajalle tila-->
+                    <div>
+                        <label>Loppuaika</label>
+                        <input id="loppuaika" type="datetime-local" name="aika" value="2018-01-02T13:42:00" required="required">
+                    </div>
+                </fieldset>
+                <!--Painike, jolla tallennetaan uusi kilpailu-->
+                <button id="tallennaK" onclick="validateKilpailu()">Tallenna kilpailu</button>
+            </form>
+        </div>
+        <div id="oikea">
+            <h2>Joukkueet: </h2>
+            <!--Joukkuelistaukselle tila-->
+            <ul id="joukkueListaus">
+            </ul>
+        </div>
+    </div>
 </body>
 
 </html>

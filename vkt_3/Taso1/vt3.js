@@ -17,6 +17,30 @@ window.onload = function () {
     console.log(data);
     luoSarjalistaus();
     luoJoukkuelistaus();
+    // jokaiselle validoitavalle kentälle luodaan onchange tapahtuma, joka tarkistaa kenttien oikeellisuudet
+    document.getElementById('joukkueenNimi').addEventListener("change", joukueenNimiValidate);
+    document.getElementById('joukkueenNimi').setCustomValidity("Joukkueen nimi ei saa olla tyhjä");
+    document.getElementById('aika').addEventListener("change", aikaValidate);
+    var checkboxit = document.querySelectorAll('input[name="leimaus"]');
+    for (let c of checkboxit) {
+        c.addEventListener("change", checkboxValidate);
+    }
+    var jasenet = document.querySelectorAll('input[name="jasen"]');
+    for (let j of jasenet) {
+        j.addEventListener("change", jasenetValidate);
+    }
+    document.querySelector('form').addEventListener("submit", function (e) {
+        tallenna();
+        e.preventDefault();
+    });
+};
+
+// Tarkistetaan kenttien oikeellisuudet
+function validate() {
+    joukueenNimiValidate();
+    aikaValidate();
+    checkboxValidate();
+    jasenetValidate();
 }
 
 // Luodaan sarja listaus datan mukaan näkyviin
@@ -85,38 +109,29 @@ function jarjestykseen(a, b) {
 }
 
 // Kun klikataan tallenna painiketta suoritetaan
-function tallenna(e) {
-    e.preventDefault();
-    var nimiVirhe = joukueenNimiValidate();
-    var aikaVirhe = aikaValidate();
-    var checkVirhe = checkboxValidate();
-    var jasenVirhe = jasenetValidate();
-    var totVirheet = nimiVirhe + aikaVirhe + checkVirhe + jasenVirhe;
-    // Jos ei löydy virheitä
-    if (totVirheet === 0) {
-        // uusiJoukkue ja sen tiedot
-        var uusiJoukkue = new Object();
-        uusiJoukkue.id = idJoukkueelle;
-        uusiJoukkue.jasenet = saaJasenet();
-        uusiJoukkue.leimaustapa = saaLeimaus();
-        uusiJoukkue.luontiaika = saaAika();
-        uusiJoukkue.matka = 0;
-        uusiJoukkue.nimi = document.getElementById('joukkueenNimi').value;
-        uusiJoukkue.pisteet = 0;
-        var rastit = [];
-        uusiJoukkue.rastit = rastit;
-        uusiJoukkue.sarja = saaSarja();
-        uusiJoukkue.seura = "";
-        idJoukkueelle++;
-        // lisätään uusi joukkue data.joukkeisiin
-        data.joukkueet.push(uusiJoukkue);
-        // lisätään uusi joukkue joukkuelistaukseen
-        var ul = document.getElementById("joukkueListaus");
-        lisaaJoukkueListaan(ul, data.joukkueet.length - 1);
-        // tulostetaan vielä koko data, josta nähdään, että uusi joukkue on siellä oikein
-        console.log(data);
-    }
-}
+function tallenna() {
+    // uusiJoukkue ja sen tiedot
+    var uusiJoukkue = new Object();
+    uusiJoukkue.id = idJoukkueelle;
+    uusiJoukkue.jasenet = saaJasenet();
+    uusiJoukkue.leimaustapa = saaLeimaus();
+    uusiJoukkue.luontiaika = saaAika();
+    uusiJoukkue.matka = 0;
+    uusiJoukkue.nimi = document.getElementById('joukkueenNimi').value;
+    uusiJoukkue.pisteet = 0;
+    var rastit = [];
+    uusiJoukkue.rastit = rastit;
+    uusiJoukkue.sarja = saaSarja();
+    uusiJoukkue.seura = "";
+    idJoukkueelle++;
+    // lisätään uusi joukkue data.joukkeisiin
+    data.joukkueet.push(uusiJoukkue);
+    // lisätään uusi joukkue joukkuelistaukseen
+    var ul = document.getElementById("joukkueListaus");
+    lisaaJoukkueListaan(ul, data.joukkueet.length - 1);
+    // tulostetaan vielä koko data, josta nähdään, että uusi joukkue on siellä oikein
+    console.log(data);
+};
 
 // Tarkastellaan, onko checkboxeista, jokin valittu
 function checkboxValidate() {
@@ -125,8 +140,7 @@ function checkboxValidate() {
     var nfc = document.getElementById('nfc');
     var qr = document.getElementById('qr');
     var lomake = document.getElementById('lomake');
-    // Virheiden lkm
-    var virhe = 0;
+    lomake.setCustomValidity("Valitse leimaustapa");
     // Jos jokin valittu kaikki ok
     if ((gps.checked) || (nfc.checked) || (qr.checked) || (lomake.checked)) {
         gps.parentNode.style.color = "black";
@@ -135,24 +149,19 @@ function checkboxValidate() {
         // Jos ei ole valittu mitään tulee virhe
         gps.parentNode.style.color = "red";
         lomake.setCustomValidity("Valitse leimaustapa");
-        virhe = 1;
     }
-    return virhe;
 }
 
 // Ajan validointi
 function aikaValidate() {
     var aika = document.getElementById('aika');
-    var virhe = 0;
     if (aika.value >= '2018-01-01T01:00') {
         aika.style.color = "red";
         aika.setCustomValidity("Ajan on olatava pienempi kuin 01/01/2018 01:00");
-        virhe = 1;
     } else {
         aika.style.color = "blue";
         aika.setCustomValidity("");
     }
-    return virhe;
 }
 
 // Joukkueen nimen validointi
@@ -181,13 +190,11 @@ function joukueenNimiValidate() {
         tekstikentta.setCustomValidity("");
         tekstikentta.style.borderColor = "blue";
     }
-    return virhe;
 }
 
 // Jäsenien validointi
 function jasenetValidate() {
     var lkm = 0;
-    var virhe = 0;
     // lasketaan, onko vähintään kaksi jäsentä nimetty
     for (let i = 1; i <= jasen; i++) {
         var kentta = document.getElementById('kentta' + i);
@@ -202,7 +209,6 @@ function jasenetValidate() {
             kentta.style.borderColor = "red";
         }
         document.getElementById('kentta' + jasen).setCustomValidity("Joukkueella on oltava vähintään kaksi jäsentä");
-        virhe = 1;
     } else {
         for (let i = 1; i <= jasen; i++) {
             var kentta = document.getElementById('kentta' + i);
@@ -210,7 +216,6 @@ function jasenetValidate() {
         }
         document.getElementById('kentta' + jasen).setCustomValidity("");
     }
-    return virhe;
 }
 
 // Lisätään uusi jäsen kenttä klikkaamalla painiketta
@@ -231,6 +236,7 @@ function luoRivi(id, teksti, fieldset) {
     var buttonJasen = document.getElementById('buttonJasen')
     input.setAttribute("size", "40");
     input.setAttribute("required", "required");
+    input.setAttribute("name", "jasen");
     input.id = 'kentta' + jasen;
     label.appendChild(document.createTextNode(teksti));
     label.appendChild(input);

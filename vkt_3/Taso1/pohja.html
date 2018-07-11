@@ -62,34 +62,34 @@
             <legend>Jäsenet</legend>
             <p>
                 <label>Jäsen 1
-                    <input size="40" id="kentta1">
+                    <input size="40" id="kentta1" name="jasen">
                 </label>
             </p>
             <p>
                 <label>Jäsen 2
-                    <input size="40" id="kentta2">
+                    <input size="40" id="kentta2" name="jasen">
                 </label>
             </p>
             <p>
                 <label>Jäsen 3
-                    <input size="40" id="kentta3">
+                    <input size="40" id="kentta3" name="jasen">
                 </label>
             </p>
             <p>
                 <label>Jäsen 4
-                    <input size="40" id="kentta4">
+                    <input size="40" id="kentta4" name="jasen">
                 </label>
             </p>
             <p>
                 <label>Jäsen 5
-                    <input size="40" id="kentta5">
+                    <input size="40" id="kentta5" name="jasen">
                 </label>
             </p>
             <!--Painike, jolla voidaan lisätä uusi jäsen kenttä-->
             <button onclick="lisaaJasen(event)" id="buttonJasen">Lisää jäsen</button>
         </fieldset>
         <!--Painike, jolla tallennetaan uusi joukkue-->
-        <button onclick="tallenna(event)">Tallenna</button>
+        <button onclick="validate()">Tallenna</button>
     </form>
     <h2>Joukkueet: </h2>
     <!--Joukkuelistaukselle tila-->
