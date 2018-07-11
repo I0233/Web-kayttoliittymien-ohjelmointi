@@ -1,7 +1,13 @@
+/*
+* Taustaväri mustaksi
+*/
 html, body {
   background-color: black;
 }
 
+/*
+* Asetetaan container koko ikkunan leveydelle
+*/
 #container {
   position: fixed;
   top: 0;
@@ -11,71 +17,79 @@ html, body {
   margin: auto;
 }
 
+/*
+* Vasemman pupun puolikkaan canvas, näkymään palkkien eteen ja pöllön taakse
+* ja sille animaatio
+*/
 #childCanv1 {
-  z-index: -2;
+  height: 100%;
+  z-index: -1;
   position: absolute;
   animation-duration: 5s;
   animation-name: slide-left;
-  transition: 0.15s all ease;
   animation-iteration-count: infinite;
   animation-direction: alternate;
 }
 
+/*
+* Oikean pupun puolikkaan canvas, näkymään palkkien eteen ja pöllön taakse
+* ja sille animaatio
+*/
 #childCanv2 {
-  z-index: -2;
+  height: 100%;
+  z-index: -1;
   position: absolute;
   animation-duration: 5s;
   animation-name: slide-right;
-  transition: 0.15s all ease;
   animation-iteration-count: infinite;
   animation-direction: alternate;
 }
 
+/*
+* Palkit oikean kokoisiksi ja taaimmaisiksi ja animaation lisäys
+*/
 svg {
   position: absolute;
   left: 0;
   top: 0;
+  height: 100%;
+  width: 100%;
   z-index: -2;
   animation-name: slide-bar;
   animation-duration: 5s;
-  transition: 0.15s all ease;
   animation-iteration-count: infinite;
   animation-direction: alternate;
 }
 
+/*
+* Pöllö paikoilleen ja animaation lisäys
+*/
 #owl-img {
   position: absolute;
   left: 0%;
   top: 0%;
-  z-index: -1;
   animation-name: slide-owl;
-  -webkit-animation-name: slide-owl;
   animation-duration: 5s;
-  transition: 0.50s all ease;
   animation-iteration-count: infinite;
 }
 
-.blue-bar {
-  fill: #00FFFF;
-  height: 100%;
-}
 
+/*
+* Palkkien animaatio
+*/
 @keyframes slide-bar {
   0% {}
-  25% {
-    left: 25%;
-  }
   50% {
-    left: 50%;
-  }
-  75% {
-    left: 75%;
+    left: 100%;
   }
   100% {
-    left: 100%;
+    left: 0%;
   }
 }
 
+/*
+* Pöllön animaatio
+*/
 @keyframes slide-owl {
   0% {}
   25% {
@@ -96,6 +110,9 @@ svg {
   }
 }
 
+/*
+* Vasemman pupun puolikkaan animaatio
+*/
 @keyframes slide-left {
   from {
     right: calc(100%/2);
@@ -105,6 +122,9 @@ svg {
   }
 }
 
+/*
+* Oikean pupun puolikkaan animaatio
+*/
 @keyframes slide-right {
   from {
     left: calc(100%/2);
