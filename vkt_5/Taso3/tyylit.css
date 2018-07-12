@@ -38,3 +38,14 @@ body {
 h1 {
   font-size: 20px;
 }
+
+/*
+* Rastien koodien tyylittely
+*/
+.textLabelclass{
+  white-space:nowrap;
+  font-size: 14px;
+  text-shadow: 0 0 0.1em black, 0 0 0.1em black,
+        0 0 0.1em black,0 0 0.1em black,0 0 0.1em;
+  color: rgb(255, 0, 212);
+}

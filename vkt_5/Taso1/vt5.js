@@ -157,11 +157,11 @@ window.onload = function () {
 
     luoJoukkuelistaus();
 
-        // Lisätään diveihin, joissa listat dragover ja drop eventit
-        document.getElementById("valitut").addEventListener("dragover", ylla);
-        document.getElementById("valitut").addEventListener("drop", drop);
-        document.getElementById("Joukkueet").addEventListener("dragover", ylla);
-        document.getElementById("Joukkueet").addEventListener("drop", dropTakaisin);
+    // Lisätään diveihin, joissa listat dragover ja drop eventit
+    document.getElementById("valitut").addEventListener("dragover", ylla);
+    document.getElementById("valitut").addEventListener("drop", drop);
+    document.getElementById("Joukkueet").addEventListener("dragover", ylla);
+    document.getElementById("Joukkueet").addEventListener("drop", dropTakaisin);
 }
 
 // Luodaan joukkuelistaus

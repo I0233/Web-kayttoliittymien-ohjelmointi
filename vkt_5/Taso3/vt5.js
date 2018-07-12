@@ -3,6 +3,8 @@
 var mymap;
 let circles = [];
 let reitit = [];
+let labels = [];
+let marker;
 
 /**
  *   MML layers for Leaflet. https://github.com/jleh/Leaflet.MML-layers
@@ -139,15 +141,30 @@ window.onload = function () {
         if (data.rastit[i].lon <= minLon) {
             minLon = data.rastit[i].lon
         }
-        var circle = L.circle(
+
+        // Rastien koodien luonti
+        mymap.createPane('labels');
+        // Asetetaan koodit pallojen taakse
+        mymap.getPane('labels').style.zIndex = 300;
+        let label = L.marker(new L.LatLng(data.rastit[i].lat, parseFloat(data.rastit[i].lon) + parseFloat(0.004)), {
+            icon: createLabelIcon("textLabelclass", data.rastit[i].koodi),
+            name: data.rastit[i].koodi,
+            pane: 'labels'
+        }).addTo(mymap);
+
+
+        let circle = L.circle(
             [data.rastit[i].lat, data.rastit[i].lon], {
+                name: data.rastit[i].koodi,
                 color: 'red',
                 fillColor: '#f03',
                 fillOpacity: 0.5,
-                radius: 150 / 2
+                radius: 150
             }
         ).addTo(mymap).on("click", circleClick);
+
         circles.push(circle);
+        labels.push(label);
     }
 
     // Muodostetaan alue pienimmistä ja suurimmista lon ja lat
@@ -161,6 +178,7 @@ window.onload = function () {
     // Joukkueen kulkema matka
     joukkueenMatka();
 
+    // Listaus joukkueista
     luoJoukkuelistaus();
 
     // Lisätään diveihin, joissa listat dragover ja drop eventit
@@ -177,22 +195,26 @@ function luoJoukkuelistaus() {
     let ul = document.getElementById("joukkueListaus");
     for (let i = 0; i < data.joukkueet.length; i++) {
         let li = document.createElement("li");
-        let label = document.createElement("label");
-        label.appendChild(document.createTextNode(data.joukkueet[i].nimi + ", " + data.joukkueet[i].matka + " km"));
-        li.appendChild(label);
-        // listan elementille väri
-        li.style.backgroundColor = rainbow(data.joukkueet.length, i + 1);
-        // asetetaan label dragattavaksi
-        label.setAttribute("draggable", "true");
-        // asetetaan listan elementille id:ksi siinä olevan joukkueen nimi
-        li.setAttribute("id", data.joukkueet[i].nimi);
+        tekstiElementtiin(li, i);
         ul.appendChild(li);
-
-        // Lisätään draggayksen aloitus event, jossa kerätään tieto mitä joukkuetta liikutetaan
-        label.addEventListener("dragstart", function (e) {
-            e.dataTransfer.setData("text/plain", data.joukkueet[i].nimi);
-        });
     }
+}
+
+// Lisätään teksti joukkue taulukkoon ja kartalla taulukkoon
+function tekstiElementtiin(li, i) {
+    let label = document.createElement("label");
+    label.appendChild(document.createTextNode(data.joukkueet[i].nimi + ", " + data.joukkueet[i].matka + " km"));
+    li.appendChild(label);
+    // listan elementille väri
+    li.style.backgroundColor = rainbow(data.joukkueet.length, i + 1);
+    // asetetaan label dragattavaksi
+    label.setAttribute("draggable", "true");
+    // asetetaan listan elementille id:ksi siinä olevan joukkueen nimi
+    li.setAttribute("id", data.joukkueet[i].nimi);
+    // Lisätään draggayksen aloitus event, jossa kerätään tieto mitä joukkuetta liikutetaan
+    label.addEventListener("dragstart", function (e) {
+        e.dataTransfer.setData("text/plain", data.joukkueet[i].nimi);
+    });
 }
 
 // Valmiiksi annettu värien hakuun tarkoitettu funktio
@@ -269,14 +291,13 @@ function drop(e) {
             }
         }
     }
-    
+
     // Piirretään reitti
     let polyline = L.polyline(koords, {
         name: e.dataTransfer.getData("text"),
         color: li.style.backgroundColor
     }).addTo(mymap);
     reitit.push(polyline);
-    
 }
 
 // Kun dropataan takaisin joukkue listaukseen
@@ -345,11 +366,20 @@ function deg2rad(deg) {
     return deg * (Math.PI / 180)
 }
 
-
+// Kun klikataan yhtä rastia
 function circleClick(e) {
+    // Poistetaan aikaisempi marker näymästä, jos sellainen on
+    if (marker !== undefined) {
+        mymap.removeLayer(marker);
+    }
+
     let latAndLon;
+    let name;
+
+    // Asetetaan klikattu pallo kokonaan punaiseksi ja alustetaan muut takaisin
     for (let i = 0; i < circles.length; i++) {
         if (circles[i] === e.target) {
+            name = circles[i].options.name;
             circles[i].setStyle({
                 fillColor: 'red',
                 fillOpacity: 1
@@ -362,43 +392,95 @@ function circleClick(e) {
             });
         }
     }
-    var marker = L.marker(latAndLon, {
+
+    // Tehdään marker ja sille dragatty event
+    marker = L.marker(latAndLon, {
         draggable: 'true'
     }).addTo(mymap).on('dragend', function (e) {
+        // Kun marker on liikutettu uuteen kohtaan tullaan tähän
+        // Luodaan uusi label uudelle rastin paikalle
+        let label = L.marker(new L.LatLng(marker.getLatLng().lat, parseFloat(marker.getLatLng().lng) + parseFloat(0.004)), {
+            icon: createLabelIcon("textLabelclass", name),
+            name: name,
+            pane: 'labels'
+        }).addTo(mymap);
+        // Luodaan uusi ympyrä siihen kohtaan, johon marker tiputettu
         var circle = L.circle(
             marker.getLatLng(), {
                 color: 'red',
                 fillColor: '#f03',
                 fillOpacity: 0.5,
-                radius: 150 / 2
+                radius: 150,
+                name: name
             }
         ).addTo(mymap).on("click", circleClick);
+
         circles.push(circle);
+        labels.push(label);
+
+        // Muutetaan liikutetun rastin lat ja lon
         for (let i = 0; i < data.rastit.length; i++) {
             if (parseFloat(data.rastit[i].lat).toFixed(6) == latAndLon.lat.toFixed(6) && parseFloat(data.rastit[i].lon).toFixed(6) == latAndLon.lng.toFixed(6)) {
                 data.rastit[i].lat = marker.getLatLng().lat;
                 data.rastit[i].lon = marker.getLatLng().lng;
             }
         }
+        // Poistetaan aikaisempi rasti
         for (let i = 0; i < circles.length; i++) {
             if (circles[i].options.fillColor === 'red') {
                 mymap.removeLayer(circles[i]);
                 circles.splice(i, 1);
             }
         }
-        mymap.removeLayer(marker);
-        for(let i = 0; i < reitit.length; i++){
-            var koordinaatit = reitit[i].getLatLngs();
-            for(let j = 0; j < koordinaatit.length; j++){
-                if(koordinaatit[j].lat == latAndLon.lat && koordinaatit[j].lng == latAndLon.lng){
+        // poistetaan aikaisempi rastin koodi
+        for (let i = 0; i < labels.length; i++) {
+            if (labels[i].options.name === name) {
+                mymap.removeLayer(labels[i]);
+                labels.splice(i, 1);
+                break;
+            }
+        }
+
+        // Kerätään reittien koordinaatit
+        for (let i = 0; i < reitit.length; i++) {
+            let koordinaatit = reitit[i].getLatLngs();
+            for (let j = 0; j < koordinaatit.length; j++) {
+                if (koordinaatit[j].lat == latAndLon.lat && koordinaatit[j].lng == latAndLon.lng) {
                     koordinaatit[j].lat = marker.getLatLng().lat;
                     koordinaatit[j].lng = marker.getLatLng().lng;
                 }
             }
+            // Poistetaan aikaisempi reitti näkymästä
+            mymap.removeLayer(reitit[i]);
+
+            // Näytetään päivitetty reitti
             let polyline = L.polyline(koordinaatit, {
                 name: reitit[i].options.name,
                 color: reitit[i].options.color
             }).addTo(mymap);
+            reitit.splice(i, 1, polyline);
         }
+
+        // Lasketaan joukkueille uudet matkat, kun rasti on siirretty
+        joukkueenMatka();
+
+        // Päivitetään matkat näkyviin taulukoihin
+        for (let i = 0; i < data.joukkueet.length; i++) {
+            var li = document.getElementById(data.joukkueet[i].nimi);
+            while (li.firstChild) {
+                li.removeChild(li.firstChild);
+            }
+            tekstiElementtiin(li, i);
+        }
+        // Poistetaan marker
+        mymap.removeLayer(marker);
     });
+}
+
+// Labelin ominaisuuksien asettaminen
+var createLabelIcon = function (labelClass, labelText) {
+    return L.divIcon({
+        className: labelClass,
+        html: labelText
+    })
 }
