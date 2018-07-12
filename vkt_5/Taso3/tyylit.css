@@ -1,0 +1,40 @@
+/*
+* bodynn tyylitykset
+*/
+body {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+* Asetellaan koko sivulle ja wrap toimimaan
+*/
+#content {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: 2%;
+}
+
+/*
+* div, johon tulee kartta
+*/
+#map {
+  min-width: 200px;
+  flex: 1 54%;
+}
+
+/*
+* divit, joihin tulee joukkueet listaus ja joukkueet kartalla listaus
+*/
+.col {
+  min-width: 200px;
+  flex: 1 23%;
+}
+
+/*
+* Listojen otsikot
+*/
+h1 {
+  font-size: 20px;
+}
