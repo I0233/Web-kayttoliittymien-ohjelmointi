@@ -1,14 +1,6 @@
-// data-muuttuja sisältää kaiken tarvittavan ja on rakenteeltaan lähes samankaltainen kuin viikkotehtävässä 2
-// Rastileimaukset on siirretty tupa-rakenteesta suoraan jokaisen joukkueen yhteyteen
-//
-// voit tutkia tarkemmin käsiteltävää tietorakennetta konsolin kautta 
-// tai json-editorin kautta osoitteessa http://jsoneditoronline.org/
-// Jos käytät json-editoria niin avaa data osoitteesta:
-// http://appro.mit.jyu.fi/tiea2120/vt/vt3/data.json
-
 "use strict";
 
-let mymap;
+var mymap;
 
 /**
  *   MML layers for Leaflet. https://github.com/jleh/Leaflet.MML-layers
@@ -114,16 +106,13 @@ let mymap;
 
 }, window));
 
-// Alustetaan kaikki
 window.onload = function () {
-
-    // Kartan asettelu ja näkyvyys
     var div = $("#map");
     div.css("height", Math.round(window.innerHeight) + "px");
 
     mymap = new L.map('map', {
         crs: L.TileLayer.MML.get3067Proj()
-    }).setView([62, 25], 11);
+    }).setView([62.2333, 25.7333], 11);
     L.tileLayer.mml_wmts({
         layer: "maastokartta"
     }).addTo(mymap);
@@ -168,12 +157,12 @@ window.onload = function () {
 
     luoJoukkuelistaus();
 
-    // Lisätään diveihin, joissa listat dragover ja drop eventit 
-    document.getElementById("valitut").addEventListener("dragover", ylla);
-    document.getElementById("valitut").addEventListener("drop", drop);
-    document.getElementById("Joukkueet").addEventListener("dragover", ylla);
-    document.getElementById("Joukkueet").addEventListener("drop", dropTakaisin);
-};
+        // Lisätään diveihin, joissa listat dragover ja drop eventit
+        document.getElementById("valitut").addEventListener("dragover", ylla);
+        document.getElementById("valitut").addEventListener("drop", drop);
+        document.getElementById("Joukkueet").addEventListener("dragover", ylla);
+        document.getElementById("Joukkueet").addEventListener("drop", dropTakaisin);
+}
 
 // Luodaan joukkuelistaus
 function luoJoukkuelistaus() {
