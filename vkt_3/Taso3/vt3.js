@@ -224,7 +224,6 @@ function peruutaLisays(e) {
 
 // Kun klikataan tallenna painiketta suoritetaan
 function tallenna() {
-    event.preventDefault();
     if (joukkueMuokattavana === 0) {
         // uusiJoukkue ja sen tiedot
         var uusiJoukkue = new Object();
