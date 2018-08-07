@@ -7,7 +7,6 @@ div {
 
 fieldset {
   padding-top: 1%;
-  padding-right: 20%;
 }
 
 input {
@@ -19,11 +18,30 @@ span {
   text-align: end;
 }
 
+input[name="joukkueenNimi"],
 .tekstikentta {
   width: 40%;
   min-width: 230px;
 }
 
+.tekstikentta {
+  border: 1px solid blue;
+}
+
 :required {
   border: 1px solid blue;
+}
+
+#row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#vasen {
+  flex: 1 70%;
+}
+
+#oikea {
+  flex: 1 30%;
+  min-width: 170px;
 }
