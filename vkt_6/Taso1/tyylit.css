@@ -1,3 +1,6 @@
+/* 
+* Kaikille diveille tyyli
+*/
 div {
   height: 100%;
   display: inline-block;
@@ -5,42 +8,69 @@ div {
   margin-bottom: 1%;
 }
 
+/*
+* Fieldseteille yläosaan padding
+*/
 fieldset {
   padding-top: 1%;
 }
 
+/*
+* Kaikki tekstikentät ja checkboxit sekä radiobuttonit oikealle
+*/
 input {
   float: right;
 }
 
+/*
+* Checkboxien ja radiobuttonien span oikeaan laitaan
+*/
 span {
   float: right;
   text-align: end;
 }
 
+/*
+* Tekstikenttien koko muuttuvaksi sivun mukaan sekä minimi leveys
+*/
 input[name="joukkueenNimi"],
 .tekstikentta {
   width: 40%;
   min-width: 230px;
 }
 
+/*
+* Jäsenet tekstikenttien rajat sinisiksi osoittamaan, että niiden täyttäminen on pakollista
+*/
 .tekstikentta {
   border: 1px solid blue;
 }
 
+/*
+* Pakollisuus
+*/
 :required {
   border: 1px solid blue;
 }
 
+/*
+* Lomake ja joukkuelistaus vierekkäin käyttäen flex ja wrappaysta
+*/
 #row {
   display: flex;
   flex-wrap: wrap;
 }
 
+/*
+* Lomake vasemmalle
+*/
 #vasen {
   flex: 1 70%;
 }
 
+/*
+* Joukkuelistaus oikealle
+*/
 #oikea {
   flex: 1 30%;
   min-width: 170px;

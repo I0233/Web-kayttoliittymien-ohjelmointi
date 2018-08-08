@@ -1,56 +1,71 @@
 "use strict";
 
+/*
+App komponentti, jossa käsitellään näkymän avautuminen ja tietorakenteen kopiointi ja siihen lisäys
+*/
 class App extends React.Component {
-
-    constructor(props) {
-    	super(props);
-
-        // tehdään kopio tietorakenteen joukkueista
-        // Tämä on tehtävä näin, että saadaan oikeasti aikaan kopio eikä vain viittausta samaan tietorakenteeseen. Objekteja ja taulukoita ei voida kopioida vain sijoitusoperaattorilla
-        // päivitettäessä React-komponentin tilaa on aina vanha tila kopioitava uudeksi tällä tavalla
+	constructor(props) {
+		super(props);
+		// tehdään kopio tietorakenteen joukkueista
+		// Tämä on tehtävä näin, että saadaan oikeasti aikaan kopio eikä vain viittausta samaan tietorakenteeseen. Objekteja ja taulukoita ei voida kopioida vain sijoitusoperaattorilla
+		// päivitettäessä React-komponentin tilaa on aina vanha tila kopioitava uudeksi tällä tavalla
 		// kts. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from
-        let joukkueet = Array.from( data.joukkueet, function(j) {
-            // luodaan uusijoukkue
-            let uusij = {};
-            // kopioidaan tavalliset kentät
-            let kentat = ["nimi", "sarja", "seura", "id"];
-            for( let i of kentat )
-                uusij[i] = j[i];
-            // taulukot on kopioitava erikseen. Nyt riittää pelkkä array.from, koska tauluiden
-            // sisällä ei ole muita taulukoita tai objekteja
-            let uusijasenet = Array.from( j["jasenet"] );
-            let uusirastit = Array.from( j["rastit"] );
-            let uusileimaustapa = Array.from( j["leimaustapa"] );
-            uusij["jasenet"] = uusijasenet;
-            uusij["rastit"] = uusirastit;
-            uusij["leimaustapa"] = uusileimaustapa;
-            return uusij;
+		let joukkueet = Array.from( data.joukkueet, function(j) {
+			// luodaan uusijoukkue
+			let uusij = {};
+			// kopioidaan tavalliset kentät
+			let kentat = ["nimi", "sarja", "seura", "id"];
+			for( let i of kentat )
+					uusij[i] = j[i];
+			// taulukot on kopioitava erikseen. Nyt riittää pelkkä array.from, koska tauluiden
+			// sisällä ei ole muita taulukoita tai objekteja
+			let uusijasenet = Array.from( j["jasenet"] );
+			let uusirastit = Array.from( j["rastit"] );
+			let uusileimaustapa = Array.from( j["leimaustapa"] );
+			uusij["jasenet"] = uusijasenet;
+			uusij["rastit"] = uusirastit;
+			uusij["leimaustapa"] = uusileimaustapa;
+			return uusij;
 		});
-		
-        this.state = { 
+		this.state = { 
 			"joukkueet" : joukkueet
 		};
 	};
 
+	/*
+	Tallennetaan lomakkeella tehty joukkue tietorakenteeseen ja stateen
+	*/
 	tallennaJoukkue = (joukkue) => {
 		if(joukkue) {
+			// Kerätään kaikki tarpeelliset tiedot tietorakenteeseen tallennettavaan objektiin
+			let tallennettava = new Object();
 			let sarjaId = this.saaSarjaId(joukkue.sarja);
-			joukkue.sarja = sarjaId;
-			joukkue.id = parseInt(Math.random() * 1000);
-			joukkue.rastit = [];
-			joukkue.seura = null;
-			joukkue.matka = 0;
-			joukkue.pisteet = 0;
-			data.joukkueet.push(joukkue);
-			let joukkueCopy = Object.assign({}, joukkue);
+			tallennettava.id = parseInt(Math.random() * 100000000);
+			tallennettava.jasenet = joukkue.jasenet;
+			tallennettava.leimaustapa = joukkue.leimaustapa;
+			tallennettava.luontiaika = joukkue.luontiaika;
+			tallennettava.matka = 0;
+			tallennettava.nimi = joukkue.nimi;
+			tallennettava.pisteet = 0;
+			tallennettava.rastit = [];
+			tallennettava.sarja = sarjaId;
+			tallennettava.seura = null;
+			// Lisätään dataan joukkue
+			data.joukkueet.push(tallennettava);
+			// Tehdään kopio
+			let joukkueCopy = Object.assign({}, tallennettava);
+			// Poistetaan kopiosta ylimääräiset tiedot
 			delete joukkueCopy.matka, delete joukkueCopy.pisteet, delete joukkueCopy.luontiaika;
-			this.setState({joukkueet: this.state.joukkueet.push(joukkueCopy)});
+			// Lisätään kopio stateen
+			this.state.joukkueet.push(joukkueCopy);
+			this.setState({"joukkueet": this.state.joukkueet});
+			// Tulostetaan päivitetyt listaukset
+			console.log("State joukkueet:", this.state.joukkueet);
+			console.log("Data joukkueet:", data.joukkueet);
 		}
-		console.log("State joukkueet:", this.state.joukkueet);
-		console.log("Data joukkueet:", data.joukkueet);
-		
 	}
 
+	// Etsitään sarjan id tietorakenteesta
 	saaSarjaId = (sarja) => {
 		if(sarja && data && data.kisat && data.kisat.length > 0) {
 			for (let i = 0; i < data.kisat[0].sarjat.length; i++) {
@@ -63,8 +78,9 @@ class App extends React.Component {
 		}
 	}
 
-    render () {
-        return (
+	render () {
+		return (
+			// Luodaan näkymä, jossa vasemmalla lomake, jolla lisätään joukkue ja oikealla joukkue listaus.
 			<div id="row">
 				<div id="vasen">
 					<LisaaJoukkue joukkueet={this.state.joukkueet} tallennaJoukkue={this.tallennaJoukkue} />
@@ -74,64 +90,79 @@ class App extends React.Component {
 				</div>
 			</div>
 		)
-
-    }
+	}
 }
 
+/*
+Komponentti, jolla luodaan lomake joukkueen lisäämiseksi
+*/
 class LisaaJoukkue extends React.Component {
     constructor(props) {
 		super(props);
-
+		
+		// Bindataan funktiot, jotta toimivat
 		this.handleChange = this.handleChange.bind(this);
 		this.handleInsert = this.handleInsert.bind(this);
 		this.haeLomakeTiedot = this.haeLomakeTiedot.bind(this);
-
+		
+		// Asetetaan stateen tiedot joukkueista ja alustetaan paikka lomakkeen tiedoille
 		this.state = {
 			"joukkueet": this.props.joukkueet,
 			"lomakeTiedot": {}
 		}
 	}
 
+	/*
+	Käsitellään tietojen muuttuminen, kun tietoja kirjoitetaan lomakkeelle
+	*/
 	handleChange = (e) => {
 		this.joukueenNimiValidate();
 		this.jasenetValidate();
 	}
 
-    handleInsert = (e) => {
+	/*
+	Kerätään lomakkeen tiedot, kun klikataan tallenna painiketta
+	*/
+	handleInsert = (e) => {
 		e.preventDefault();
 		this.haeLomakeTiedot();
 	}
 
+	/*
+	Validoidaan joukkueen nimi
+	*/
 	joukueenNimiValidate = () => {
 		let tekstikentta = document.querySelector("input[name='joukkueenNimi']");
-        let virhe = 0;
-        // Jos joukkueen nimi on tyhjä, tulee siitä virhe
-        if (tekstikentta.value.length === 0) {
-            virhe = 2;
-        }
-        for (let i = 0; i < this.state.joukkueet.length; i++) {
-            // Jos joukkueen nimi löytyy trimmatusta datasta, tulee virhe
-            if (this.state.joukkueet[i].nimi.trim() === tekstikentta.value) {
-				virhe = 1;
-            }
+		let virhe = 0;
+		// Jos joukkueen nimi on tyhjä, tulee siitä virhe
+		if (tekstikentta.value.length === 0) {
+			virhe = 2;
 		}
-        // virheen käsittely
-        if (virhe === 1) {
-            tekstikentta.setCustomValidity("Joukkueen nimi on jo olemassa");
-            tekstikentta.style.borderColor = "red";
-            tekstikentta.style.boxShadow = "1px 1px 1px red";
-        } else if (virhe === 2) {
-            tekstikentta.setCustomValidity("Joukkueen nimi ei saa olla tyhjä");
-            tekstikentta.style.borderColor = "red";
-            tekstikentta.style.boxShadow = "1px 1px 1px red";
-        } else {
-            tekstikentta.setCustomValidity("");
-            tekstikentta.style.borderColor = "blue";
-            tekstikentta.style.boxShadow = "";
-        }
+		for (let i = 0; i < this.state.joukkueet.length; i++) {
+			// Jos joukkueen nimi on jo toisella joukkueella ei sitä saa hyväksyä
+			if (this.state.joukkueet[i].nimi.trim() === tekstikentta.value) {
+				virhe = 1;
+			}
+		}
+		// virheen käsittely
+		if (virhe === 1) {
+			tekstikentta.setCustomValidity("Joukkueen nimi on jo olemassa");
+			tekstikentta.style.borderColor = "red";
+			tekstikentta.style.boxShadow = "1px 1px 1px red";
+		} else if (virhe === 2) {
+			tekstikentta.setCustomValidity("Joukkueen nimi ei saa olla tyhjä");
+			tekstikentta.style.borderColor = "red";
+			tekstikentta.style.boxShadow = "1px 1px 1px red";
+		} else {
+			tekstikentta.setCustomValidity("");
+			tekstikentta.style.borderColor = "blue";
+			tekstikentta.style.boxShadow = "";
+		}
 	}
 	
-	// JÃ¤senien validointi
+	/*
+	Jäsenien validointi
+	*/
 	jasenetValidate = () => {
 		var lkm = 0;
 		let jasenetKentat = document.getElementsByClassName('tekstikentta');
@@ -160,7 +191,10 @@ class LisaaJoukkue extends React.Component {
 			}
 		}
 	}
-	// Kerätääm, mitkä leimaukset on valittuina
+
+	/*
+	Kerätään, mitkä leimaukset on valittuina
+	*/
 	saaLeimaus = () => {
 		var leimaus = [];
 		var gps = document.getElementById('gps');
@@ -182,7 +216,9 @@ class LisaaJoukkue extends React.Component {
 		return leimaus;
 	}
 	
-	// Saadaan aika oikeaan muotoon kentästä
+	/*
+	Saadaan aika oikeaan muotoon kentästä
+	*/
 	saaAika = (aika) => {
 		var year = aika.substring(0, 4);
 		var month = aika.substring(5, 7);
@@ -191,10 +227,13 @@ class LisaaJoukkue extends React.Component {
 		var minute = aika.substring(14, 16);
 		aika = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":00";
 		let dateTmp = new Date(year, month, day, hour, minute);
+		// Jos aika on oikeaa muotoa palautetaan se, muulloin null
 		return (dateTmp instanceof Date && !isNaN(dateTmp.getTime())) ? aika : null;
 	}
 
-	// Saadaan valittu sarja
+	/*
+	Saadaan valitun sarjan nimi
+	*/
 	saaSarja = () => {
 		let nimi;
 		let sarjat = document.querySelectorAll('input[name="sarja"]');
@@ -207,7 +246,9 @@ class LisaaJoukkue extends React.Component {
 		return nimi;
 	}
 
-	// KerÃ¤tÃ¤Ã¤n jÃ¤senten tiedot
+	/*
+	Kerätään jäsenten nimet
+	*/
 	saaJasenet = () => {
 		let jasenet = [];
 		let jasenetKentat = document.getElementsByClassName('tekstikentta');
@@ -220,6 +261,9 @@ class LisaaJoukkue extends React.Component {
 		return jasenet;
 	}
 
+	/*
+	Kerätään kaikki lomakkeen tiedot stateen
+	*/
 	haeLomakeTiedot = () => {
 		this.state.lomakeTiedot['nimi'] = document.querySelector("input[name='joukkueenNimi']").value;
 		this.state.lomakeTiedot['luontiaika'] = this.saaAika(document.getElementById('alkuaika').value);
@@ -228,9 +272,13 @@ class LisaaJoukkue extends React.Component {
 		this.state.lomakeTiedot['jasenet'] = this.saaJasenet();
 		this.setState({lomakeTiedot: this.state.lomakeTiedot});
 		this.props.tallennaJoukkue(this.state.lomakeTiedot);
+		// Tyhjennetään lomake
 		this.reset();
 	}
 
+	/*
+	Lomakkeen tyhjennys alkuperäiseksi
+	*/
 	reset = () => {
 		document.querySelector("input[name='joukkueenNimi']").value = "";
 		document.getElementById('alkuaika').value = "vvvv-kk-ppThh:mm";
@@ -245,11 +293,12 @@ class LisaaJoukkue extends React.Component {
 		}
 	}
 
-    render() {
-        return (
-            <div>
-                <h1>Lisää joukkue</h1>
-                <form method="post" onSubmit={this.handleInsert}>
+	render() {
+		return (
+			// Lomakkeen asettelu sellaiseksi kuin pitää olla
+			<div>
+				<h1>Lisää joukkue</h1>
+				<form method="post" onSubmit={this.handleInsert}>
 					<fieldset>
 						<legend>Joukkueen tiedot</legend>
 						<div>
@@ -328,23 +377,27 @@ class LisaaJoukkue extends React.Component {
 						</div>
 					</fieldset>
 					<button type="submit">Tallenna</button>
-                </form>
-            </div>
-        );
-    }
+				</form>
+			</div>
+		);
+	}
 }
 
+/*
+Joukkue listaus komponentti
+*/
 class ListaaJoukkueet extends React.Component {
-    constructor(props) {
+	constructor(props) {
 		super(props);
 		this.state = {
 			joukkueet: this.props.joukkueet
 		}
 	}
-	haeJoukkueet 
+	haeJoukkueet
 	render = () => {
 		let joukkueet = this.state.joukkueet;
 		return(
+			// Listaus näykmä
 			<div id="listaus">
 				<h2>Joukkueet</h2>
 				<ul>
@@ -355,10 +408,11 @@ class ListaaJoukkueet extends React.Component {
 			</div>
 		);
 	}
-
-	
 }
 
+/*
+Ohjelman käynnistys
+*/
 ReactDOM.render(
 	<App> </App>,
 	document.getElementById('root')
